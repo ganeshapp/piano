@@ -12,11 +12,11 @@ The source, lockfile, runtime assets, tests, documentation, upstream notices, an
 
 ## Verification
 
-- **106 automated tests passed** with Vitest, covering XML/MXL import, pitches/enharmonics, ties, tempo changes, exact ordinary tuplet durations, simultaneous chords, independent holds and selective releases, repeated attacks, final release, hand filtering, passage-entry setup, round-trip instruction interpretation, MIDI matching, mock devices, routing, transport cancellation and looping.
+- **112 automated tests passed** with Vitest, covering XML/MXL import, pitches/enharmonics, ties, tempo changes, exact ordinary tuplet durations, simultaneous chords, independent holds and selective releases, repeated attacks, final release, hand filtering, passage-entry setup, round-trip instruction interpretation, MIDI matching, mock devices, routing, transport cancellation and looping.
 - Every one of the 69 bundled arrangements was parsed and its action sequence passed the independent interpreter check. These checks do not establish that unsupported ornaments or source errors are musically correct.
 - TypeScript and the Vite production build passed. The production site is approximately 2.1 MB including the scores and notices; no sound sample download is needed.
 - Browser checks in the **Codex in-app browser** exercised library filtering, opening an actual built-in score, manual stepping, original/steady playback, loop continuity, pause, hand filtering, position/range persistence, MusicXML and MXL file import, local import persistence after refresh, and readable selective-release instructions with matching held keyboard keys.
-- The **actual production output** was served at `http://127.0.0.1:4173/piano-preview/`. Catalog and score loading worked there, as did refreshing a nested `#/piece/...` route and restoring its passage/position. GitHub Actions also completed a clean public-registry install, all 106 tests, the build, and deployment. The public HTTPS site was then verified in the browser.
+- The **actual production output** was served at `http://127.0.0.1:4173/piano-preview/`. Catalog and score loading worked there, as did refreshing a nested `#/piece/...` route and restoring its passage/position. GitHub Actions also completed a clean public-registry install, all 112 tests, the build, and deployment. The public HTTPS site was then verified in the browser.
 - A 720-pixel window was checked for a usable stacked layout. The keyboard has horizontal scrolling when its fixed passage range cannot fit. The default desktop view was also inspected.
 - No physical MIDI device was connected for verification. Chrome/Edge hardware acceptance and audible latency on the user's particular piano still need a first-use check. Unsupported/declined MIDI, disconnect/reconnect, device switching, input/output separation and output cleanup have automated coverage.
 - Browser interaction verified playback state and visual synchronization. This is not an acoustic timing measurement or a claim of expert musical listening review.
@@ -28,6 +28,10 @@ The source, lockfile, runtime assets, tests, documentation, upstream notices, an
 3. **Honest readiness limits.** The full collection is visible, including complex works. Unsupported advanced notation is labeled before playback rather than silently presented as complete. The user's normal path can start with a ready arrangement.
 4. **Difficulty is estimated or Unrated.** Exact source pages inspected during preparation were inaccessible. Estimated labels are visibly distinguished, with the rationale and source retained.
 5. **No staff score renderer.** The final direction replaced sheet music with action notation. The user can inspect source links and advanced staff-to-hand assignments, but daily practice does not require reading a score.
+
+## Browser audio compatibility fix
+
+Audio releases feature-detect `AudioParam.cancelAndHoldAtTime`. Browsers without it use standard automation cancellation and a reconstructed release endpoint. Regression tests cover both paths, early and late releases, scheduled reattacks, and cleanup. This addresses the reported Firefox playback failure; the fallback tests simulate the missing method rather than claiming an automated Firefox browser run.
 
 ## Current musical limits
 

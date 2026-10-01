@@ -1,9 +1,16 @@
+interface Voice {
+  gain: GainNode;
+  osc: OscillatorNode;
+  start: number;
+  peak: number;
+}
+
 // Local synthesized piano: no remote soundfont, sample download, or analytics.
 export class PianoAudio {
   context: AudioContext | null = null;
   enabled = true;
-  private voices = new Map<number, { gain: GainNode; osc: OscillatorNode }>();
-  private all = new Set<{ gain: GainNode; osc: OscillatorNode }>();
+  private voices = new Map<number, Voice>();
+  private all = new Set<Voice>();
   async init() {
     if (!this.context) this.context = new AudioContext();
     await this.context.resume();
@@ -27,11 +34,12 @@ export class PianoAudio {
     osc.connect(gain);
     gain.connect(c.destination);
     gain.gain.setValueAtTime(0, when);
-    gain.gain.linearRampToValueAtTime(0.12 * (velocity / 127), when + 0.006);
+    const peak = 0.12 * (Math.max(1, Math.min(127, velocity)) / 127);
+    gain.gain.linearRampToValueAtTime(peak, when + 0.006);
     gain.gain.exponentialRampToValueAtTime(0.015, when + 0.8);
     gain.gain.exponentialRampToValueAtTime(0.0001, when + 9);
     osc.start(when);
-    const voice = { gain, osc };
+    const voice = { gain, osc, start: when, peak };
     osc.onended = () => this.all.delete(voice);
     osc.stop(when + 10);
     this.voices.set(pitch, voice);
@@ -40,8 +48,32 @@ export class PianoAudio {
   off(pitch: number, when = this.now) {
     const voice = this.voices.get(pitch);
     if (!voice || !this.context) return;
-    voice.gain.gain.cancelAndHoldAtTime(Math.max(when, this.now));
-    voice.gain.gain.setTargetAtTime(0.00001, Math.max(when, this.now), 0.035);
+    const time = Math.max(when, this.now),
+      param = voice.gain.gain;
+    if (typeof param.cancelAndHoldAtTime === "function") {
+      param.cancelAndHoldAtTime(time);
+    } else {
+      // Removing a future ramp endpoint also removes the ramp leading to it.
+      // Recreate its endpoint at release time using our known envelope, so
+      // look-ahead releases neither jump in volume nor shorten held notes.
+      param.cancelScheduledValues(time);
+      const elapsed = time - voice.start;
+      if (elapsed <= 0) param.setValueAtTime(0, time);
+      else if (elapsed <= 0.006)
+        param.linearRampToValueAtTime((voice.peak * elapsed) / 0.006, time);
+      else if (elapsed <= 0.8)
+        param.exponentialRampToValueAtTime(
+          voice.peak * (0.015 / voice.peak) ** ((elapsed - 0.006) / 0.794),
+          time,
+        );
+      else if (elapsed <= 9)
+        param.exponentialRampToValueAtTime(
+          0.015 * (0.0001 / 0.015) ** ((elapsed - 0.8) / 8.2),
+          time,
+        );
+      else param.setValueAtTime(0.0001, time);
+    }
+    param.setTargetAtTime(0.00001, time, 0.035);
     try {
       voice.osc.stop(Math.max(when, this.now) + 0.18);
     } catch {
