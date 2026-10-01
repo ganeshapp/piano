@@ -8,7 +8,7 @@ All **69** upstream library files are included and exposed in the catalog. **11*
 
 The library has **7 estimated Beginner**, **34 estimated Advanced**, and **28 Unrated** arrangements. No external classification was invented when source pages could not be accessed. Version filenames are visible so different arrangements remain distinguishable. Complete per-file reasons appear in `catalog-inventory.md` and the details dialog.
 
-The source, lockfile, runtime assets, tests, documentation, upstream notices, and `.github/workflows/pages.yml` are prepared for the user-created repository `ganeshapp/piano`. Public deployment awaits enabling GitHub Pages.
+The source, lockfile, runtime assets, tests, documentation, upstream notices, and `.github/workflows/pages.yml` are prepared for the user-created repository `ganeshapp/piano`. The Actions deployment succeeded; the published library and an actual built-in score were verified at `https://www.gapp.in/piano/`.
 
 ## Verification
 
@@ -16,7 +16,7 @@ The source, lockfile, runtime assets, tests, documentation, upstream notices, an
 - Every one of the 69 bundled arrangements was parsed and its action sequence passed the independent interpreter check. These checks do not establish that unsupported ornaments or source errors are musically correct.
 - TypeScript and the Vite production build passed. The production site is approximately 2.1 MB including the scores and notices; no sound sample download is needed.
 - Browser checks in the **Codex in-app browser** exercised library filtering, opening an actual built-in score, manual stepping, original/steady playback, loop continuity, pause, hand filtering, position/range persistence, MusicXML and MXL file import, local import persistence after refresh, and readable selective-release instructions with matching held keyboard keys.
-- The **actual production output** was served at `http://127.0.0.1:4173/piano-preview/`. Catalog and score loading worked there, as did refreshing a nested `#/piece/...` route and restoring its passage/position. This verifies local subpath behavior, not GitHub account configuration or a published deployment.
+- The **actual production output** was served at `http://127.0.0.1:4173/piano-preview/`. Catalog and score loading worked there, as did refreshing a nested `#/piece/...` route and restoring its passage/position. GitHub Actions also completed a clean public-registry install, all 106 tests, the build, and deployment. The public HTTPS site was then verified in the browser.
 - A 720-pixel window was checked for a usable stacked layout. The keyboard has horizontal scrolling when its fixed passage range cannot fit. The default desktop view was also inspected.
 - No physical MIDI device was connected for verification. Chrome/Edge hardware acceptance and audible latency on the user's particular piano still need a first-use check. Unsupported/declined MIDI, disconnect/reconnect, device switching, input/output separation and output cleanup have automated coverage.
 - Browser interaction verified playback state and visual synchronization. This is not an acoustic timing measurement or a claim of expert musical listening review.

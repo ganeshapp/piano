@@ -2,7 +2,7 @@
 
 A personal solo-piano practice studio. Read two scrolling rows of key addresses instead of sheet music, see the keys on a large piano, and practice with your connected digital piano.
 
-This is a working static web application. No server accounts, analytics, paid service, remote soundfonts, or API keys are required. All 69 MusicXML arrangements from the pinned MuseTrainer library are included. No site has been published yet.
+This is a working static web application. No server accounts, analytics, paid service, remote soundfonts, or API keys are required. All 69 MusicXML arrangements from the pinned MuseTrainer library are included. The app is deployed at **https://www.gapp.in/piano/**.
 
 ## Run locally
 
@@ -92,6 +92,6 @@ The repository can have any name. Vite uses relative asset URLs and hash routes,
 4. Run **Test and deploy Piano Path** from the Actions tab, or push another commit to `main`.
 5. Wait for the build and deploy jobs to succeed. GitHub provides the published URL in the deployment result.
 
-The workflow checks pull requests without deploying them. Publication has not been attempted because GitHub Pages has not yet been enabled. The workflow follows [GitHub's custom Pages workflow documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+The workflow checks pull requests without deploying them. The initial Actions deployment succeeded and the live library and a built-in score were verified. Set the Pages source to GitHub Actions so future deployments use the compiled app. The workflow follows [GitHub's custom Pages workflow documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
 
 A static Pages website is normally publicly reachable. App code licensing and individual musical arrangement rights are separate; retained source metadata and concrete missing notices are described in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). No extra third-party downloads are needed for playback once the site assets load.

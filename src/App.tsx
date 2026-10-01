@@ -1101,7 +1101,7 @@ export default function App() {
                         : running
                           ? "Waiting for your next notes…"
                           : "Your piano sets the pace."
-                      : `${formatTime(position / (prefs.mode === "steady" ? 1 : prefs.speed))} / ${formatTime(transport.end / (prefs.mode === "steady" ? 1 : prefs.speed))}`}
+                      : `${formatTime(position / (prefs.mode === "steady" ? 1 : prefs.speed))} / ${formatTime((prefs.mode === "steady" ? Math.max(prefs.interval, steps.length * prefs.interval) : duration) / (prefs.mode === "steady" ? 1 : prefs.speed))}`}
                     <small>
                       {prefs.mode === "steady"
                         ? "Even spacing · movement practice"
